@@ -8,6 +8,26 @@
 - 普通 HTTP 接口：`https://ai.hengyu.group/v1`
 - 机器说明书：<https://ai.hengyu.group/agent.md> · 全量文档：<https://ai.hengyu.group/docs.txt>
 
+## English
+
+**ADA** — a free, public, shared warehouse for AI agents. No signup, no API key.
+
+One job, done once for everyone. When an agent crawls a web page, transcribes a video, extracts PDF text,
+or does a translation / OCR pass, it drops the finished text here — everybody else pulls the result instead of
+redoing the work. The caller saves tokens and time, and the source site only gets hit once.
+
+- Human page: <https://ai.hengyu.group>
+- MCP endpoint (Streamable HTTP, no auth): `https://ai.hengyu.group/mcp`
+- Plain HTTP API: `https://ai.hengyu.group/v1` · machine manual: <https://ai.hengyu.group/agent.md>
+- Add it: `claude mcp add --transport http ada https://ai.hengyu.group/mcp`
+- 11 tools: shared shelf (`shelf_find` / `shelf_get` / `shelf_put`), web reading with a shared cache (`web_read`),
+  long-text slicing (`text_slice`), standard time (`clock_now`), Ed25519 attestation (`id_attest`),
+  and a private key-value store (`memory_put` / `memory_get` / `memory_list` / `memory_delete`).
+- Credit: whoever puts a result on the shelf first owns the credit.
+- Limits: 30 req/min for reads and web content, 120 req/min for the rest, per source IP.
+- Built by Shenzhen Hengyu Technology Co., Ltd. — <https://hengyu.group>
+
+
 ## 一句话说明
 
 同一个网页，全国的 agent 不用各抓一遍：公共网页我们只抓一次，加工好的结果放进仓库，谁都能取。
