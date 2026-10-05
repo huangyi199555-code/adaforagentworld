@@ -1,0 +1,40 @@
+{
+  "serverInfo": {
+    "name": "ada",
+    "title": "ADA · 艾达",
+    "version": "0.1.0"
+  },
+  "description": "面向 AI Agent 的公共接口服务（网页正文·共享缓存／长文本检索／标准时间／Ed25519 验签／1MB 键值存储）。读接口免密钥，免注册。",
+  "protocolVersion": "2025-06-18",
+  "supportedProtocolVersions": ["2025-06-18", "2025-03-26", "2024-11-05"],
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://ai.hengyu.group/mcp"
+  },
+  "authentication": "none（读接口免密钥；键值存储使用自领 X-Agent-Key）",
+  "capabilities": {
+    "tools": { "listChanged": false },
+    "resources": false,
+    "prompts": false,
+    "logging": false
+  },
+  "tools": [
+    { "name": "web_read", "description": "读取网页正文。全站共享缓存：命中缓存即秒回，节省 token。", "inputSchema": { "type": "object", "required": ["url"], "properties": { "url": { "type": "string" }, "max_chars": { "type": "integer" }, "force": { "type": "boolean" } } } },
+    { "name": "text_slice", "description": "长文本检索：传入原文或网址 + 关键词，仅返回带行号的相关行，节省 token。", "inputSchema": { "type": "object", "required": [], "properties": { "text": { "type": "string" }, "url": { "type": "string" }, "query": { "type": "string" }, "max_lines": { "type": "integer" }, "context": { "type": "integer" } } } },
+    { "name": "clock_now", "description": "返回标准时间（UTC+8，已 NTP 校时）。", "inputSchema": { "type": "object", "required": [], "properties": { "tz": { "type": "string" } } } },
+    { "name": "id_attest", "description": "校验 Ed25519 签名，验证消息是否由该公钥持有者签发。", "inputSchema": { "type": "object", "required": ["public_key", "signature"], "properties": { "public_key": { "type": "string" }, "message": { "type": "string" }, "signature": { "type": "string" } } } },
+    { "name": "memory_put", "description": "写入键值存储（每 Agent 1MB，仅持密钥者可读写）。", "inputSchema": { "type": "object", "required": ["key", "value"], "properties": { "key": { "type": "string" }, "value": { "type": "string" }, "agent_key": { "type": "string" } } } },
+    { "name": "memory_get", "description": "从键值存储读取一条。", "inputSchema": { "type": "object", "required": ["key"], "properties": { "key": { "type": "string" }, "agent_key": { "type": "string" } } } },
+    { "name": "memory_list", "description": "列出键值存储中的键（支持前缀）。", "inputSchema": { "type": "object", "required": [], "properties": { "prefix": { "type": "string" }, "agent_key": { "type": "string" } } } },
+    { "name": "memory_delete", "description": "删除键值存储中的一条。", "inputSchema": { "type": "object", "required": ["key"], "properties": { "key": { "type": "string" }, "agent_key": { "type": "string" } } } }
+  ],
+  "instructions": "读接口直接调用，无需密钥；如需键值存储，先 POST /v1/register 申请密钥（仅返回一次）。信封统一 {ok, message_zh, data}。限速：网页正文 30 次/分/IP，申请密钥 5 次/分/IP。",
+  "documentation": "https://ai.hengyu.group/agent.md",
+  "homepage": "https://ai.hengyu.group/",
+  "provider": {
+    "organization": "衡羽科技 Hengyu Technology",
+    "url": "https://hengyu.group"
+  },
+  "free": true,
+  "updatedAt": "2026-10-04"
+}
